@@ -1,7 +1,7 @@
 body {
     font-family: Verdana, sans-serif;
     margin: auto;
-    padding: 20px;
+    padding: 0 20px 0 20px;
     max-width: 900px;
     text-align: left;
     background-color: #fff;
@@ -24,6 +24,16 @@ html {
     /* Firefox */
 }
 
+.Site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+  
+.Site-content {
+    flex: 1;
+}
+
 h1,
 h2,
 h3,
@@ -43,6 +53,9 @@ a {
 
 a:hover {
     text-decoration: underline; 
+}
+.title-wrapper {
+    padding-top: 20px;
 }
 
 .title {
@@ -167,7 +180,7 @@ blockquote {
 }
 
 footer {
-    padding: 25px 0;
+    padding: 5px 0;
     text-align: left;
 }
 
@@ -343,6 +356,6 @@ small a {
 }
 
 .bottom-footer {
-    padding: 50px;
+    padding: 10px;
     text-align: center;
 }
