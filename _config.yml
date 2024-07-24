@@ -55,4 +55,3 @@ exclude:
 exclude: [vendor]
 
 Blog: /blog
-posts: /posts
