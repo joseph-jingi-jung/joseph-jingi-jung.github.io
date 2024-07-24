@@ -103,7 +103,7 @@ textarea.full-screen {
     bottom: -2px;
     left: 0;
     width: calc(100vw - 30px);
-    max-width: 720px;
+    max-width: 900px;
     border: 10px solid;
     border-width: 10px calc(50vw - 370px);
 }
@@ -334,7 +334,6 @@ hr {
 }
 
 body:hover {
-    border-image: ;
     border-width: 0;
 }
 
