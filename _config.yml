@@ -1,11 +1,10 @@
 ###########
 # site.title
 
-title: jekyllBear
+title: Notes
 description: a minimal, text focused blog theme
 # baseurl: "/jekyllBear" # the subpath of your site, e.g. /blog/
-url: "https://knhash.in/jekyllBear" # the base hostname & protocol for your site
-# host: 0.0.0.0
+url: "https://joseph-jingi-jung.github.io/" # the base hostname & protocol for your site
 
 
 #########################
@@ -46,7 +45,7 @@ defaults:
 
 # baseurl: ""
 permalink: /blog/:slug
-timezone: America/New_York
+timezone: Asian/Seoul
 future: false
 
 exclude:
@@ -56,12 +55,3 @@ exclude:
 exclude: [vendor]
 
 Blog: /blog
-
-# Add general links to site pages here
-links:
-  Resume: /assets/resume.pdf
-  
-
-# Add links for more focus here
-special_links:
-  "Search": https://duckduckgo.com
