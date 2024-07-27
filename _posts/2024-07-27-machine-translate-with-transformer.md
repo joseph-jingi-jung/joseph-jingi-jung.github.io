@@ -2,7 +2,7 @@
 layout: post
 title: TIL, 2024-07-27
 subtitle: Transformer를 이용한 기계 번역 구현(1)
-date: 2024-07-25 22:26:00 +0900
+date: 2024-07-27 22:55:00 +0900
 tags:
 - nlp
 ---
