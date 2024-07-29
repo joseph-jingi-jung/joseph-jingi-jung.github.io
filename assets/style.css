@@ -193,6 +193,9 @@ footer {
     color: #777;
     font-weight: 100;   
 }
+.title-title {
+    color: #222;
+}
 
 .errorlist {
     color: #eba613;
@@ -335,6 +338,10 @@ ul.discover-posts li small a {
     .til-title-date {
         color: #aaa;
     }
+    .title-title {
+        color: #eee;
+    }
+    
 }
 
 

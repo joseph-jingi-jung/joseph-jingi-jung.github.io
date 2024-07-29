@@ -15,8 +15,12 @@ layout: compress
 
     {{ page.content }}
 
+    {% if category == "til" %}
+        <a href="{{ site.baseurl }}/til">← Back to all writings</a>
+    {% else %}
+        <a href="{{ site.baseurl }}/blog">← Back to all writings</a>
+    {% endif %}
 
-    <a href="{{ site.baseurl }}/blog">← Back to all writings</a>
 </main>
 
 {% include footer-post.html %}
