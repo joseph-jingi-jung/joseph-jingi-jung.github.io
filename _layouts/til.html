@@ -20,10 +20,10 @@ layout: compress
         {% for post in post_list %}
         {% unless post == previous %}
         <li>
-            <h1>{{ page.title }}</h1>
-            <i>{{ page.date | date: "%b %d, %Y" }}</i>
-            <h4 class="subtitle">{{ page.subtitle }}</h4>
-            {{ page.content }}
+            <h1>{{ post.title }}</h1>
+            <i>{{ post.date | date: "%b %d, %Y" }}</i>
+            <h4 class="subtitle">{{ post.subtitle }}</h4>
+            {{ post.content }}
         </li>
         {% endunless %}
         {% assign previous = post %}
