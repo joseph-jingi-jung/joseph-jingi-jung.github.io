@@ -1,0 +1,4 @@
+---
+slug: vision
+name: Vision
+---
