@@ -3,6 +3,7 @@ layout: post
 title: TIL, 2024-07-25
 subtitle: Attention is all you need
 date: 2024-07-25 22:26:00 +0900
+category: TIL
 tags:
 - nlp
 ---
