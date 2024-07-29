@@ -21,7 +21,8 @@ layout: compress
     <article>
         <header>
             <h3>
-                <i class="til-title-date">{{ post.date | date: "%b %d, %Y" }}, </i>{{ post.subtitle }}
+                <i class="til-title-date">{{ post.date | date: "%b %d, %Y" }}, </i>
+                <a href="{{ site.baseurl }}{{ post.url }}">{{ post.subtitle }}</a>
             </h3>
         </header>
         <section>
