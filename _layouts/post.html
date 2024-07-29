@@ -14,7 +14,8 @@ layout: compress
     <h4 class="subtitle">{{ page.subtitle }}</h4>
 
     {{ page.content }}
-
+    
+    {% assign category = page.category %}
     {% if category == "til" %}
         <a href="{{ site.baseurl }}/til">← Back to all writings</a>
     {% else %}
