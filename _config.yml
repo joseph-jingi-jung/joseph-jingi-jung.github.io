@@ -55,3 +55,4 @@ exclude:
 exclude: [vendor]
 
 Blog: /blog
+TIL: /til
