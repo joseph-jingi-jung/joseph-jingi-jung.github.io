@@ -20,11 +20,11 @@ layout: compress
     {% unless post == previous %}
     <article>
         <header>
-            <h2 class="post-title"><a href="{{ site.baseurl }}{{ post.url | remove: '/' }}">{{ post.title }}</a></h2>    
+            <h2 class="post-title"><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>    
         </header>
-        <section>
-            <i>{{ post.date | date: "%b %d, %Y" }}</i>
-        </section>
+        <header>
+            <i>{{ post.date | date: "%b %d, %Y" }},</i><h4 class="subtitle">{{ page.subtitle }}</h4>
+        </header>
         <section>
             <p>{{ post.content }}</p>
         </section>
