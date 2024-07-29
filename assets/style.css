@@ -359,3 +359,7 @@ small a {
     padding: 10px;
     text-align: center;
 }
+
+.til-title {
+    size: 1.17rem;
+}
