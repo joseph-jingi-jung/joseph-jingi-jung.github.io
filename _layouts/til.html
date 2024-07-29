@@ -20,7 +20,7 @@ layout: compress
     {% unless post == previous %}
     <article>
         <header>
-            <i>{{ post.date | date: "%b %d, %Y" }},</i><h4 class="subtitle">{{ post.subtitle }}</h4>
+            <i>{{ post.date | date: "%b %d, %Y" }}, </i><b>{{ post.subtitle }}</b>
         </header>
         <section>
             <p>{{ post.content }}</p>
