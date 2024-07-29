@@ -3,6 +3,7 @@ layout: post
 title: TIL, 2024-07-24
 subtitle: Github pages를 이용한 blog 설치
 date: 2024-07-24 22:26:00 +0900
+category: til
 tags:
 - general
 ---
