@@ -17,6 +17,10 @@ whitelist:
   - jekyll-redirect-from
 
 markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
 
 compress_html:
   clippings: all
