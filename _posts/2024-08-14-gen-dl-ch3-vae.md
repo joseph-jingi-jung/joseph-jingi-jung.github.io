@@ -34,8 +34,8 @@ use_math: true
     - 그 중에 평균 벡터가 0 이고 공분산 행렬이 단위 벡터인 다편량 분포
   - **인코더는 각 입력을 평균 벡터와 분산 벡터로 매핑** (차원간 상관관계X $\rightarrow$ 공분산 고려X)
     - z_mean 과 z_log_var 정의
-    - point $z= z\_mean + z\_sigma *epsilon$
-    - $z\_sigma = exp(z\_log\_var * 0.5)$
+    - point $z= \text{z_mean} + \text{z_sigma} *epsilon$
+    - $\text{z_sigma} = exp(\text{z_log_var} * 0.5)$
     - $epsilon \sim N(0, I)$
   - 재매개변수화 트릭(Reparameterization trick)
     - 표준 정규 분포에서 epsilon을 샘플링한 다음 특정 평균과 분산을 갖도록 샘플을 수동으로 조정.
@@ -45,8 +45,10 @@ use_math: true
     - KL divergence
       - 한 확률 분포가 다른 분포와 얼마나 다른지를 측정
       - 따라서 VAE에서 평균 $z\_mean$과 분산이 $z\_sigma$ 인 정규 분포가 표준 정규 분포(평균 0, 분산 0)와 얼마나 다른지를 측정.
-        $$ kl_loss = -0.5 \* sum(1 + z_log_var - z_mean^2 -exp(z_log_var)) $$
-      - 모든 차원의 $z\_mean$과 $z\_log\_val$ 가 0일 때, loss 최소화
+        \begin{aligned}
+        \text{kl_loss} = -0.5 \* sum(1 + \text{z_log_var} - \text{z_mean}^2 -exp(\text{z_log_var})) 
+        \end{aligned}
+      - 모든 차원의 $\text{z_mean}$과 $\text{z_log_val}$ 가 0일 때, loss 최소화
     - KL divergence 의 효과
       - 잠재 공간에서 포인트를 선택할 때 사용할 수 있는 잘 정의된 분포(표준 정교 분포)를 가지게 함.
       - 포인트 군집 사이에 큰 간격이 생길 가능성을 줄임(모든 인코딩 된 분포가 표준 정규 분포에 가깝게 강제하였기 때문)

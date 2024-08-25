@@ -49,7 +49,7 @@ defaults:
 
 # baseurl: ""
 permalink: /blog/:slug
-timezone: Asian/Seoul
+timezone: Asia/Seoul
 future: false
 
 exclude:
