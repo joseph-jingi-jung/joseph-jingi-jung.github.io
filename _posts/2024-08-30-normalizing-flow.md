@@ -135,7 +135,6 @@ $$
 $$
 \begin{gathered}
 \mathbf{x} = (x_1, ..., x_n) = \mathbf{f}(\mathbf{z}) = (f_1(\mathbf{z}), ... , f_n(\mathbf{z}))
-\\
 \\ J = 
 \left(
 \begin{matrix}
@@ -144,7 +143,6 @@ $$
 \\ \frac{\partial f_n}{\partial z_1} && ... && \frac{\partial f_n}{\partial z_n}
 \end{matrix}
 \right)
-
 \end{gathered}
 $$
 
@@ -159,26 +157,26 @@ $$
     - $\mathbf{z}_{1:d} = \mathbf{x}_{1:d}$ (identity transformation) 변환 없음
     - $\mathbf{z}_{d+1:n} = \mathbf{x}_{d+1:n} - m_\theta(\mathbf{x}_{1:d})$
         - $\mathbf{x}_{1:d} = \mathbf{z}_{1:d}$ 이므로, shift를 x로 표현 할 수 있음.
-- Jacobian of forward mapping:
+- Jacobian of forward mapping $\mathbf{z} \rightarrow \mathbf{x}$:
     - 단순히 Shifting 이었기 때문에, Jacobian의 대각은 모두 Identity 이다.
-    - $y = f(x) = x + g(x)$ 이므로, 
-    - Jacobian은 $\mathbf{J}_f(\mathbf{x}) = \frac{\partial \mathbf{y}}{\partial \mathbf{x}} = \mathbf{I} + \frac{\partial g(\mathbf{x})}{\partial \mathbf{x}}$ 이다.
-    - 1번째 항은 항상 I이고, 2번째항 $\frac{\partial g(\mathbf{x})}{\partial \mathbf{x}}$ 에 대하여 생각해보면
-        - 자코비안의 왼쪽 상단은   $d \times d$ 항등 행렬이다. 
-        - 오른쪽 상단은  $\frac{\partial \mathbf{z}_{1:d} }{\partial \mathbf{z}_{d+1:n}}$ 으로, $x_{d+1:n}$가 $x_{1:d}$에 직접적으로 영향을 받지 않기 때문이다.
-        - 왼쪽 하단은 $\frac{\partial(\mathbf{x}_{1:d} + m_\theta(\mathbf{x}_{1:d}))}{\partial \mathbf{z}_{1:d}}$ 로, $\mathbf{x}_{d+1:n}$는 $\mathbf{z}_{1:d}$에 영향을 받기 때문에 그대로 미분 텀이다.
-        - 오른쪽 하단은 $\frac{\partial(\mathbf{x}_{d+1:n} + m_\theta(\mathbf{x}_{1:d})) }{\partial \mathbf{z}_{d+1:n}}$ 이고 $m_\theta(\mathbf{x}_{1:d})$는 $\mathbf{z}_{d+1:n}$에 의존성이 없으므로, $I_{n-d} + 0 = I_{n-d}$ 이다.
-$$
-\begin{gathered}
-J = \frac{\partial \mathbf{x}}{\partial \mathbf{z}} = 
-\left(
-\begin{matrix}
-I_d && 0
-\\ \frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z}_{1:d}} && I_{n-d}
-\end{matrix}
-\right)
-\\
-\\ det(J) = 1
-\end{gathered}
-$$
+    - $\mathbf{x}_{1:d} = \mathbf{z}_{1:d}$ 또는  $\mathbf{x}_{d+1:n} = \mathbf{z}_{d+1:n} + m_\theta(\mathbf{z}_{1:d})$ 이므로 
+    $$
+    \begin{gathered}
+    J = \frac{\partial \mathbf{x}}{\partial \mathbf{z}} = 
+    \left(
+    \begin{matrix}
+    I_d && 0
+    \\ \frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z}_{1:d}} && I_{n-d}
+    \end{matrix}
+    \right)
+    \\
+    \\ det(J) = 1
+    \end{gathered}
+    $$
+    - 좌상단 항: $\frac{\partial \mathbf{x}_{1:d}}{\partial \mathbf{z_{1:d}}} = \frac{\partial \mathbf{z}_{1:d}}{\partial \mathbf{z}_{1:d}} = I$
+    - 우상단 항:$\frac{\partial \mathbf{x}_{1:d}}{\partial \mathbf{z_{d+1:n}}} = \frac{\partial \mathbf{z}_{1:d}}{\partial \mathbf{z}_{d+1:n}} = 0$ ($\mathbf{z}_{1:d}$ 와 $\mathbf{z}_{d+1:n}$) 는 서로 의존 관계가 없음.
+    - 좌하단 항: $\frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z_{1:d}}}$ 은 식 그대로
+    - 우하단 항: $\frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z_{d+1:n}}} = \frac{\partial (\mathbf{z}_{d+1:n} + m_\theta(z_{1:d}))}{\partial{z_{d+1}:n}} = I + 0$ 이므로, $I$
+   
 - 행렬식이 1이므로 **Volume preserving transformation** 이다.
+
