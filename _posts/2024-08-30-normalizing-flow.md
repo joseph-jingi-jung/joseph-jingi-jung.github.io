@@ -64,7 +64,7 @@ Flow model은 VAE와 유사하다.
     \end{aligned}
     $$
     - 이 때에, VAE와 달리 $x, z$는 continuous하고 같은 차원에 있어야함.
-    - Invertible matrix $A$에 대하여, $det(A^{-1}) = det(A)^{-1} 이므로,
+    - Invertible matrix $A$에 대하여, $det(A^{-1}) = det(A)^{-1}$ 이므로,
     $$
     \begin{aligned}
     p_x(\mathbf{x}) &=& p_z(\mathbf{f}^{-1}(\mathbf{x}))  \left| \partial \mathbf{f}(\mathbf{z}) \over \partial \mathbf{z} \right|^{-1}
@@ -131,5 +131,54 @@ $$
 - 만약 $x_i = f_i(\mathbf{z})$ 가 $\mathbf{z}_{\leq i}$ 에만 의존한다면, 자코비안은 하삼각행렬(lower triangular structure) 구조를 가진다. (autoregressive model과 유사.)
 - 이렇게 되면 행렬식 연산이 선형 시간(O(n)) 에 계산 가능하다.
 
+> 참고
+$$
+\begin{gathered}
+\mathbf{x} = (x_1, ..., x_n) = \mathbf{f}(\mathbf{z}) = (f_1(\mathbf{z}), ... , f_n(\mathbf{z}))
+\\
+\\ J = 
+\left(
+\begin{matrix}
+\frac{\partial f_1}{\partial z_1} && ... && \frac{\partial f_1}{\partial z_n}
+\\ \vdots && \ddots && \vdots
+\\ \frac{\partial f_n}{\partial z_1} && ... && \frac{\partial f_n}{\partial z_n}
+\end{matrix}
+\right)
 
+\end{gathered}
+$$
 
+## NICE(Nonlinear Independent components estimation) - Additive coupling layers
+확률변수 $z$를 두 분리된 서브셋 $\mathbf{z}_{1:d}, \mathbf{z}_{d+1:n}$ for any $ 1 \leq d \le n$으로 나눈다.
+- Forward mapping $\mathbf{z} \rightarrow \mathbf{x}$:
+    - $\mathbf{x}_{1:d} = \mathbf{z}_{1:d}$ (identity transformation) 변환 없음
+    - $\mathbf{x}_{d+1:n} = \mathbf{z}_{d+1:n} + m_\theta(\mathbf{z}_{1:d})$
+        - 여기서 $m_\theta(\cdot)$은 $\theta$를 파타미터로 하는 Neural network이고, $d$ 입력에 $n-d$ 출력을 내어놓는다. 
+        - vector만 더하기 때문에 단순한 이동(shift).
+- Inverse mapping $\mathbf{x} \rightarrow \mathbf{z}$
+    - $\mathbf{z}_{1:d} = \mathbf{x}_{1:d}$ (identity transformation) 변환 없음
+    - $\mathbf{z}_{d+1:n} = \mathbf{x}_{d+1:n} - m_\theta(\mathbf{x}_{1:d})$
+        - $\mathbf{x}_{1:d} = \mathbf{z}_{1:d}$ 이므로, shift를 x로 표현 할 수 있음.
+- Jacobian of forward mapping:
+    - 단순히 Shifting 이었기 때문에, Jacobian의 대각은 모두 Identity 이다.
+    - $y = f(x) = x + g(x)$ 이므로, 
+    - Jacobian은 $\mathbf{J}_f(\mathbf{x}) = \frac{\partial \mathbf{y}}{\partial \mathbf{x}} = \mathbf{I} + \frac{\partial g(\mathbf{x})}{\partial \mathbf{x}}$ 이다.
+    - 1번째 항은 항상 I이고, 2번째항 $\frac{\partial g(\mathbf{x})}{\partial \mathbf{x}}$ 에 대하여 생각해보면
+        - 자코비안의 왼쪽 상단은   $d \times d$ 항등 행렬이다. 
+        - 오른쪽 상단은  $\frac{\partial \mathbf{z}_{1:d} }{\partial \mathbf{z}_{d+1:n}}$ 으로, $x_{d+1:n}$가 $x_{1:d}$에 직접적으로 영향을 받지 않기 때문이다.
+        - 왼쪽 하단은 $\frac{\partial(\mathbf{x}_{1:d} + m_\theta(\mathbf{x}_{1:d}))}{\partial \mathbf{z}_{1:d}}$ 로, $\mathbf{x}_{d+1:n}$는 $\mathbf{z}_{1:d}$에 영향을 받기 때문에 그대로 미분 텀이다.
+        - 오른쪽 하단은 $\frac{\partial(\mathbf{x}_{d+1:n} + m_\theta(\mathbf{x}_{1:d})) }{\partial \mathbf{z}_{d+1:n}}$ 이고 $m_\theta(\mathbf{x}_{1:d})$는 $\mathbf{z}_{d+1:n}$에 의존성이 없으므로, $I_{n-d} + 0 = I_{n-d}$ 이다.
+$$
+\begin{gathered}
+J = \frac{\partial \mathbf{x}}{\partial \mathbf{z}} = 
+\left(
+\begin{matrix}
+I_d && 0
+\\ \frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z}_{1:d}} && I_{n-d}
+\end{matrix}
+\right)
+\\
+\\ det(J) = 1
+\end{gathered}
+$$
+- 행렬식이 1이므로 **Volume preserving transformation** 이다.
