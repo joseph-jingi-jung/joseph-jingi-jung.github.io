@@ -180,3 +180,28 @@ $$
    
 - 행렬식이 1이므로 **Volume preserving transformation** 이다.
 
+## Real-NVP: Non-volume preserving extention of NICE
+- NICE가 단순히 shift만으로 구현되어, 표현력이 떨어짐
+- Shift에 scale까지 더해보자
+- Forward Mapping $\mathbf{z} \rightarrow \mathbf{x}$
+    - $\mathbf{x}_{1:d} = \mathbf{z}_{1:d}$ (identity transformation)
+    - $\mathbf{x}_{d+1:n} = \mathbf{z}_{d+1:n} \odot\underbrace{\text{exp}(\alpha_\theta(\mathbf{z}_{1:d}))}_{\text{scaling}}  + \underbrace{ \mu_\theta(\mathbf{z}_{1:d})}_{\text{shift}}$
+- Inverse mapping $\mathbf{x} \rightarrow \mathbf{z}$
+    - $\mathbf{z}_{1:d} = \mathbf{x}_{1:d}$ (identity transformation)
+    - $\mathbf{z}_{d+1:n} = (\mathbf{z}_{d+1:n} \underbrace{- \mu_\theta(\mathbf{z}_{1:d})}_{\text{shift}}) \odot \underbrace{\text{exp}(-\alpha_\theta(\mathbf{x}_{1:d}))}_{\text{divide}}$
+- Jacobian of forward mapping
+$$
+\begin{gathered}
+J = \frac{\partial \mathbf{x}}{\partial \mathbf{z}} = 
+\left(
+\begin{matrix}
+I_d && 0
+\\ \frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z}_{1:d}} && \text{diag}(\text{exp}(\alpha_\theta(\mathbf{z}_{1:d})))
+\end{matrix}
+\right)
+\\
+\\ det(J) = \prod_{i+d+1}^n\,\text{exp}(\alpha_\theta(\mathbf{z}_{1:d})_i) = \text{exp} \left( \prod_{i+d+1}^n\, \alpha_\theta(\mathbf{z}_{1:d})_i  \right)
+\end{gathered}
+$$
+- 우하단항: $\frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z_{d+1:n}}} = \frac{\partial ( \mathbf{z}_{d+1:n} \odot \text{exp}(\alpha_\theta(\mathbf{z}_{1:d})) + \mu_\theta(\mathbf{z}_{1:d}))}{\partial{z_{d+1}:n}} = \text{exp}(\alpha_\theta(\mathbf{z}_{1:d}))$
+- determinant가 1보다 작거나 크므로 **Non-volue preserving tranformation**
