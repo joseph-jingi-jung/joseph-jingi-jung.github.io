@@ -29,7 +29,7 @@ Flow model은 VAE와 유사하다.
 1. 간단한 분포로부터 시작: $z \sim N(0, I) = p(z)$
 2. $p(x \vert  z)$를 통해 변환 = $N(\mu_\theta(z), \Sigma_\theta(z))$
 3. $p(z)$는 간단하지만, Marginal, $p_\theta(x)$는 매우 유연하고 복잡함. 그러나 $p_\theta(x)=\int p_\theta(x, z)dz$ 는 모든 x를 생성할 수 있는 모든 z를 봐야하므로 계산하기 매우 비싸다. (interactible)
-4. *만약 $p(x|z)$ 와 $p(z|x)$ 를 쉽게 변환 할 수 있게 디자인 한다면?* 
+4. *만약 $p(x\vert z)$ 와 $p(z\vert x)$ 를 쉽게 변환 할 수 있게 디자인 한다면?* 
     - $x = f_\theta(z)$를 deterministic 하고 invertible function of $z$로 만든다면 가능(다만 $z$와 $x$ 같은 차원이어야함)
     - 어떠한 $x$에 대하여도 대응되는 유니크한 $z$가 존재.
 
@@ -38,8 +38,8 @@ Flow model은 VAE와 유사하다.
     - if $X = f(Z)$ and $f(\cdot)$ is monotone with inverse $Z = f^{-1}(X) = h(X)$, then
     $$
     \begin{aligned}
-    p_x(x) &=& p_z(h(x))\vert h'(x)\vert
-    \\ p_x(x) &=& p_z(z)\frac{1}{f'(z)}
+    p_x(x) &= p_z(h(x))\vert h'(x)\vert
+    \\ p_x(x) &= p_z(z)\frac{1}{f'(z)}
     \end{aligned}
     $$
 - Change of variables (N D case):
@@ -48,15 +48,15 @@ Flow model은 VAE와 유사하다.
     - A는 선형이동!!
     $$
     \begin{aligned}
-    p_x(x) &=& p_z(Wx) \frac{1}{\vert det(A) \vert}
-    \\ p_x(x) &=& p_z(Wx) \vert det(W) \vert
+    p_x(x) &= p_z(Wx) \frac{1}{\vert det(A) \vert}
+    \\ p_x(x) &= p_z(Wx) \vert det(W) \vert
     \end{aligned}
     $$
     - because if $W = A^{-1},. det(W)=\frac{1}{det(A)}$ 
 - Change of variables (General case):
     - 행렬 A로부터 *선형 변환* 된 경우, 볼륨의 변화는 행렬 A의 행렬식이다. 
     - 행렬 A로부터 *비선형 변환* $\mathbf{f}(\cdot)$에 대하여, *linearlized change(선형화된 변화 - 극소지점을 봤을때 선형)* 의 볼륨은 $\mathbf{f}(\cdot)$의 자코비안의 행렬식이다.
-    - The mapping between $Z$ and $X$, given by $\mathbf{f}:\mathbb{R}^n \rightarrow \mathbb{R}^n$, is invertible such that $X= \mathbf{f}(Z)$ and $Z=\mathbf{f}^{-1}(X). 
+    - The mapping between $Z$ and $X$, given by $\mathbf{f}:\mathbb{R}^n \rightarrow \mathbb{R}^n$, is invertible such that $X= \mathbf{f}(Z)$ and $Z=\mathbf{f}^{-1}(X)$ 
     $$
     \begin{aligned}
     p_x(\mathbf{x}) &=& p_z(\mathbf{f}^{-1}(\mathbf{x}))  \left| \partial \mathbf{f}^{-1}(\mathbf{x}) \over \partial \mathbf{f} \right|
@@ -73,7 +73,8 @@ Flow model은 VAE와 유사하다.
     $$
 
 ### Normalizing flow models
-Normalizing flow model에서, $Z$ 와 $X$ 사이의 매핑은, 다음 함수 $\mathbf{f}_\theta : \mathbb{R}^n \rightarrow \mathbb{R}^n$ 이고, **deterministic** 하고 **invertible** 하다. 따라서 $X = \mathbb{f}_\theta(Z)$ 이고, $Z = \mathbb{f}_\theta^{-1}(X)$ 이다.
+Normalizing flow model에서, $Z$ 와 $X$ 사이의 매핑은, 다음 함수 $\mathbf{f}_\theta : \mathbb{R}^n \rightarrow \mathbb{R}^n$ 이고, **deterministic** 하고 **invertible** 하다. 
+따라서 $X = \mathbb{f}_\theta(Z)$ 이고, $Z = \mathbb{f}_\theta^{-1}(X)$ 이다.
 - Change if variables를 사용하면, marginal likelihood $p(x)$는 아래와 같다.
 $$
 \begin{aligned}
