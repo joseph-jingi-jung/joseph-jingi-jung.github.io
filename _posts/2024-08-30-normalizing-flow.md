@@ -36,35 +36,42 @@ Flow model은 VAE와 유사하다.
 ### Change of variables formula
 - Change of variables (1D case):
     - if $X = f(Z)$ and $f(\cdot)$ is monotone with inverse $Z = f^{-1}(X) = h(X)$, then
+    
     $$
     \begin{aligned}
     p_x(x) &= p_z(h(x))\vert h'(x)\vert
     \\ p_x(x) &= p_z(z)\frac{1}{f'(z)}
     \end{aligned}
     $$
+    
 - Change of variables (N D case):
     - Let $X = AZ$ for a square invertible matrix $A$, with inverse $W = A^{-1}$.
     - X는 $\vert det(A) \vert$ 공간의 평면체에 고르게 분포된다.
     - A는 선형이동!!
+    
     $$
     \begin{aligned}
     p_x(x) &= p_z(Wx) \frac{1}{\vert det(A) \vert}
     \\ p_x(x) &= p_z(Wx) \vert det(W) \vert
     \end{aligned}
     $$
+
     - because if $W = A^{-1},. det(W)=\frac{1}{det(A)}$ 
 - Change of variables (General case):
     - 행렬 A로부터 *선형 변환* 된 경우, 볼륨의 변화는 행렬 A의 행렬식이다. 
     - 행렬 A로부터 *비선형 변환* $\mathbf{f}(\cdot)$에 대하여, *linearlized change(선형화된 변화 - 극소지점을 봤을때 선형)* 의 볼륨은 $\mathbf{f}(\cdot)$의 자코비안의 행렬식이다.
     - The mapping between $Z$ and $X$, given by $\mathbf{f}:\mathbb{R}^n \rightarrow \mathbb{R}^n$, is invertible such that $X= \mathbf{f}(Z)$ and $Z=\mathbf{f}^{-1}(X)$ 
+    
     $$
     \begin{aligned}
     p_x(\mathbf{x}) &=& p_z(\mathbf{f}^{-1}(\mathbf{x}))  \left| \partial \mathbf{f}^{-1}(\mathbf{x}) \over \partial \mathbf{f} \right|
     \\
     \end{aligned}
     $$
+
     - 이 때에, VAE와 달리 $x, z$는 continuous하고 같은 차원에 있어야함.
     - Invertible matrix $A$에 대하여, $det(A^{-1}) = det(A)^{-1}$ 이므로,
+    
     $$
     \begin{aligned}
     p_x(\mathbf{x}) &=& p_z(\mathbf{f}^{-1}(\mathbf{x}))  \left| \partial \mathbf{f}(\mathbf{z}) \over \partial \mathbf{z} \right|^{-1}
@@ -72,10 +79,13 @@ Flow model은 VAE와 유사하다.
     \end{aligned}
     $$
 
+
 ### Normalizing flow models
-Normalizing flow model에서, $Z$ 와 $X$ 사이의 매핑은, 다음 함수 $\mathbf{f}_\theta : \mathbb{R}^n \rightarrow \mathbb{R}^n$ 이고, **deterministic** 하고 **invertible** 하다. 
-따라서 $X = \mathbb{f}_\theta(Z)$ 이고, $Z = \mathbb{f}_\theta^{-1}(X)$ 이다.
+
+- Normalizing flow model에서, $Z$ 와 $X$ 사이의 매핑은, 다음 함수 $\mathbf{f}_{\theta} : \mathbb{R}^{n} \rightarrow \mathbb{R}^{n}$ 이고, **deterministic** 하고 **invertible** 하다. 
+- 따라서 $X = f_\theta(Z)$ 이고, $Z = \mathbb{f}_\theta^{-1}(X)$ 이다.
 - Change if variables를 사용하면, marginal likelihood $p(x)$는 아래와 같다.
+
 $$
 \begin{aligned}
 p_x(\mathbf{x};\theta) &=& p_z(\mathbf{f}_\theta^{-1}(\mathbf{x}))  \left| \partial \mathbf{f}_\theta^{-1}(\mathbf{x}) \over \partial \mathbf{f} \right|
@@ -85,6 +95,7 @@ $$
 
 - Normalizing: Change of variables는 역변환 적용 후 후 normalized density(자코비안 행렬식)를 사용.
 - Flow: 역변환이 서로서로 합성되어(composed) 구성
+
 $$
 \begin{aligned}
 \mathbf{z}_m &= \mathbf{f}_\theta^m \circ ... \, \circ \mathbf{f}_\theta^1(\mathbf{z}_0)
@@ -92,15 +103,18 @@ $$
 \\ &\triangleq \mathbf{f}_\theta(\mathbf{z}_0) 
 \end{aligned} 
 $$
+
 - 간단한 분포 $\mathbf{z}_\theta$로 부터 시작 (e.g., 가우시안)
 - 연속된 M개의 역변환을 적용하여 $\mathbf{x}=\mathbf{z}_M$ 를 얻음
 - Change of variables에 의해,
+
 $$
 \begin{aligned}
 p_x(\mathbf{x}; \theta) = p_z(\mathbf{f}_\theta^{-1}(\mathbf{x})) \prod_{m=1}^M  \left| \frac{ \partial (\mathbf{f}_\theta^m)^{-1}(\mathbf{z}_m)}{\partial \mathbf{z}_m }\right|
 \\
 \end{aligned} 
 $$
+
 > note: determinant of product equals product of determiants 
 
 - 즉 NN을 아래와 같이 설계해야함
@@ -110,14 +124,18 @@ $$
 
 
 ### Learning and Inference
+
 - 데이터셋 D 에대하여 maximum likelihood를 통해 학습하면,
+
 $$
 \begin{aligned}
 \underset{\theta}{max} \, log p_x(D;\theta) = \sum_{x \in D} log p_z( \mathbf{f}_\theta^{-1} (\mathbf{x}) + log \left| det(\frac{ \partial (\mathbf{f}_\theta^m)^{-1}(\mathbf{x})}{\partial \mathbf{x} }) \right| )
 \end{aligned} 
 $$
+
 - Exact likelihood evaluation
 - **Sampling** via forward transformation z -> x
+
 $$
 \begin{aligned}
 \mathbf{z} \sim p_z(\mathbf{z}) \,\,\, \mathbf{x} = \mathbf{f}_\theta(\mathbf{z})
@@ -132,6 +150,7 @@ $$
 - 이렇게 되면 행렬식 연산이 선형 시간(O(n)) 에 계산 가능하다.
 
 > 참고
+
 $$
 \begin{gathered}
 \mathbf{x} = (x_1, ..., x_n) = \mathbf{f}(\mathbf{z}) = (f_1(\mathbf{z}), ... , f_n(\mathbf{z}))
@@ -149,25 +168,30 @@ $$
 $$
 
 ## NICE(Nonlinear Independent components estimation) - Additive coupling layers
-확률변수 $z$를 두 분리된 서브셋 $\mathbf{z}_{1:d}, \mathbf{z}_{d+1:n}$ for any $ 1 \leq d \le n$으로 나눈다.
-- Forward mapping $\mathbf{z} \rightarrow \mathbf{x}$:
-    - $\mathbf{x}_{1:d} = \mathbf{z}_{1:d}$ (identity transformation) 변환 없음
-    - $\mathbf{x}_{d+1:n} = \mathbf{z}_{d+1:n} + m_\theta(\mathbf{z}_{1:d})$
+
+- 확률변수 $z$를 두 분리된 서브셋 으로 나눈다.
+    - $\mathbf{z}_{1:d}$
+    - $\mathbf{z}_{d+1:n}$ for any $1 \leq d \le n $
+
+- Forward mapping $\mathbf{z \rightarrow x}$ :
+    - $\mathbf{x_{1:d} = z_{1:d}} $(identity transformation) 변환 없음
+    - $\mathbf{x_{d+1:n} = z_{d+1:n}} + m_\theta(\mathbf{z}_{1:d})$
         - 여기서 $m_\theta(\cdot)$은 $\theta$를 파타미터로 하는 Neural network이고, $d$ 입력에 $n-d$ 출력을 내어놓는다. 
         - vector만 더하기 때문에 단순한 이동(shift).
 - Inverse mapping $\mathbf{x} \rightarrow \mathbf{z}$
-    - $\mathbf{z}_{1:d} = \mathbf{x}_{1:d}$ (identity transformation) 변환 없음
-    - $\mathbf{z}_{d+1:n} = \mathbf{x}_{d+1:n} - m_\theta(\mathbf{x}_{1:d})$
-        - $\mathbf{x}_{1:d} = \mathbf{z}_{1:d}$ 이므로, shift를 x로 표현 할 수 있음.
+    - $\mathbf{z_{1:d} = x_{1:d}}$ (identity transformation) 변환 없음
+    - $\mathbf{z_{d+1:n} = x_{d+1:n}} - m_\theta(\mathbf{x}_{1:d})$
+        - $\mathbf{x_{1:d} = {z}_{1:d}}$ 이므로, shift를 x로 표현 할 수 있음.
 - Jacobian of forward mapping:
     - 단순히 Shifting 이었기 때문에, Jacobian의 대각은 모두 Identity 이다.
     - $y = f(x) = x + g(x)$ 이므로, 
-    - Jacobian은 $\mathbf{J}_f(\mathbf{x}) = \frac{\partial \mathbf{y}}{\partial \mathbf{x}} = \mathbf{I} + \frac{\partial g(\mathbf{x})}{\partial \mathbf{x}}$ 이다.
+    - Jacobian은 $\mathbf{J_f(x) = \frac{\partial y}{\partial x} = I + \frac{\partial g(x)}{\partial x}}$ 이다.
     - 1번째 항은 항상 I이고, 2번째항 $\frac{\partial g(\mathbf{x})}{\partial \mathbf{x}}$ 에 대하여 생각해보면
         - 자코비안의 왼쪽 상단은   $d \times d$ 항등 행렬이다. 
-        - 오른쪽 상단은  $\frac{\partial \mathbf{z}_{1:d} }{\partial \mathbf{z}_{d+1:n}}$ 으로, $x_{d+1:n}$가 $x_{1:d}$에 직접적으로 영향을 받지 않기 때문이다.
-        - 왼쪽 하단은 $\frac{\partial(\mathbf{x}_{1:d} + m_\theta(\mathbf{x}_{1:d}))}{\partial \mathbf{z}_{1:d}}$ 로, $\mathbf{x}_{d+1:n}$는 $\mathbf{z}_{1:d}$에 영향을 받기 때문에 그대로 미분 텀이다.
-        - 오른쪽 하단은 $\frac{\partial(\mathbf{x}_{d+1:n} + m_\theta(\mathbf{x}_{1:d})) }{\partial \mathbf{z}_{d+1:n}}$ 이고 $m_\theta(\mathbf{x}_{1:d})$는 $\mathbf{z}_{d+1:n}$에 의존성이 없으므로, $I_{n-d} + 0 = I_{n-d}$ 이다.
+        - 오른쪽 상단은  $\mathbf{\frac{\partial z_{1:d} }{\partial z_{d+1:n}}}$ 으로, $x_{d+1:n}$가 $x_{1:d}$에 직접적으로 영향을 받지 않기 때문이다.
+        - 왼쪽 하단은 $\mathbf{\frac{\partial(x_{1:d} + m_\theta(x_{1:d}))}{\partial z_{1:d}}}$ 로, $\mathbf{x_{d+1:n}}$는 $\mathbf{z_{1:d}}$에 영향을 받기 때문에 그대로 미분 텀이다.
+        - 오른쪽 하단은 $\mathbf{\frac{\partial(x_{d+1:n} + m_\theta(x_{1:d})) }{\partial z_{d+1:n}}}$ 이고 $m_\theta(\mathbf{x_{1:d}})$는 $\mathbf{z_{d+1:n}}$에 의존성이 없으므로, $I_{n-d} + 0 = I_{n-d}$ 이다.
+
 $$
 \begin{gathered}
 J = \frac{\partial \mathbf{x}}{\partial \mathbf{z}} = 
@@ -181,4 +205,5 @@ I_d && 0
 \\ det(J) = 1
 \end{gathered}
 $$
+
 - 행렬식이 1이므로 **Volume preserving transformation** 이다.
