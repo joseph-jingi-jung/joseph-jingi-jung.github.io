@@ -154,7 +154,6 @@ $$
 $$
 \begin{gathered}
 \mathbf{x} = (x_1, ..., x_n) = \mathbf{f}(\mathbf{z}) = (f_1(\mathbf{z}), ... , f_n(\mathbf{z}))
-\\
 \\ J = 
 \left(
 \begin{matrix}
@@ -163,7 +162,6 @@ $$
 \\ \frac{\partial f_n}{\partial z_1} && ... && \frac{\partial f_n}{\partial z_n}
 \end{matrix}
 \right)
-
 \end{gathered}
 $$
 
@@ -182,15 +180,45 @@ $$
     - $\mathbf{z_{1:d} = x_{1:d}}$ (identity transformation) 변환 없음
     - $\mathbf{z_{d+1:n} = x_{d+1:n}} - m_\theta(\mathbf{x}_{1:d})$
         - $\mathbf{x_{1:d} = {z}_{1:d}}$ 이므로, shift를 x로 표현 할 수 있음.
-- Jacobian of forward mapping:
+- Jacobian of forward mapping $\mathbf{z} \rightarrow \mathbf{x}$:
     - 단순히 Shifting 이었기 때문에, Jacobian의 대각은 모두 Identity 이다.
-    - $y = f(x) = x + g(x)$ 이므로, 
-    - Jacobian은 $\mathbf{J_f(x) = \frac{\partial y}{\partial x} = I + \frac{\partial g(x)}{\partial x}}$ 이다.
-    - 1번째 항은 항상 I이고, 2번째항 $\frac{\partial g(\mathbf{x})}{\partial \mathbf{x}}$ 에 대하여 생각해보면
-        - 자코비안의 왼쪽 상단은   $d \times d$ 항등 행렬이다. 
-        - 오른쪽 상단은  $\mathbf{\frac{\partial z_{1:d} }{\partial z_{d+1:n}}}$ 으로, $x_{d+1:n}$가 $x_{1:d}$에 직접적으로 영향을 받지 않기 때문이다.
-        - 왼쪽 하단은 $\mathbf{\frac{\partial(x_{1:d} + m_\theta(x_{1:d}))}{\partial z_{1:d}}}$ 로, $\mathbf{x_{d+1:n}}$는 $\mathbf{z_{1:d}}$에 영향을 받기 때문에 그대로 미분 텀이다.
-        - 오른쪽 하단은 $\mathbf{\frac{\partial(x_{d+1:n} + m_\theta(x_{1:d})) }{\partial z_{d+1:n}}}$ 이고 $m_\theta(\mathbf{x_{1:d}})$는 $\mathbf{z_{d+1:n}}$에 의존성이 없으므로, $I_{n-d} + 0 = I_{n-d}$ 이다.
+    - $\mathbf{x_{1:d} = z_{1:d}}$ 또는  $\mathbf{x_{d+1:n} = z_{d+1:n} + m_\theta(z_{1:d})}$ 이므로 
+    
+    $$
+    \begin{gathered}
+    J = \frac{\partial \mathbf{x}}{\partial \mathbf{z}} = 
+    \left(
+    \begin{matrix}
+    I_d && 0
+    \\ \frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z}_{1:d}} && I_{n-d}
+    \end{matrix}
+    \right)
+    \\
+    \\ det(J) = 1
+    \end{gathered}
+    $$
+
+    - 좌상단 항: $\mathbf{\frac{\partial x_{1:d}}{\partial z_{1:d}} = \frac{\partial z_{1:d}}{\partial z_{1:d}}} = I$
+    - 우상단 항: $\mathbf{\frac{\partial x_{1:d}}{\partial z_{d+1:n}} = \frac{\partial z_{1:d}}{\partial z_{d+1:n}}} = 0$ ($\mathbf{z_{1:d}}$ 와 $\mathbf{z_{d+1:n}}$) 는 서로 의존 관계가 없음.
+    - 좌하단 항: $\mathbf{\frac{\partial x_{d+1:n}}{\partial z_{1:d}}}$ 은 식 그대로
+    - 우하단 항: $\mathbf{\frac{\partial x_{d+1:n}}{\partial z_{d+1:n}}} = \mathbf{\frac{\partial (z_{d+1:n} + m_\theta(z_{1:d}))}{\partial{z_{d+1}:n}}} = I + 0$ 이므로, $I$
+   
+- 행렬식이 1이므로 **Volume preserving transformation** 이다.
+
+## Real-NVP: Non-volume preserving extention of NICE
+- NICE가 단순히 shift만으로 구현되어, 표현력이 떨어짐
+- Shift에 scale까지 더해보자
+- Forward Mapping $\mathbf{z \rightarrow x}$
+    - $\mathbf{x_{1:d} = z_{1:d}}$ (identity transformation)
+    - $\mathbf{x_{d+1:n} = z_{d+1:n}} \odot \text{exp} \mathbf{(\alpha_\theta(z_{1:d})) + \mu_\theta(z_{1:d})}$
+    - $\odot \text{exp} \mathbf{(\alpha_\theta(z_{1:d}))}$ : scaling
+    - $\mathbf{\mu_\theta(z_{1:d})}$ : shift
+- Inverse mapping $\mathbf{x \rightarrow z}$
+    - $\mathbf{z_{1:d} = x_{1:d}}$ (identity transformation)
+    - $\mathbf{z_{d+1:n} = (z_{d+1:n}} - \mu_\theta(\mathbf{z_{1:d}}))\odot\text{exp}(-\alpha_\theta(\mathbf{x_{1:d}}))$
+    - $- \mu_\theta(\mathbf{z_{1:d}})$ : shift
+    - $\text{exp}(-\alpha_\theta(\mathbf{x_{1:d}}))$ : divide
+- Jacobian of forward mapping
 
 $$
 \begin{gathered}
@@ -198,12 +226,19 @@ J = \frac{\partial \mathbf{x}}{\partial \mathbf{z}} =
 \left(
 \begin{matrix}
 I_d && 0
-\\ \frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z}_{1:d}} && I_{n-d}
+\\ \frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z}_{1:d}} && \text{diag}(\text{exp}(\alpha_\theta(\mathbf{z}_{1:d})))
 \end{matrix}
 \right)
 \\
-\\ det(J) = 1
+\\ det(J) = \prod_{i+d+1}^n\,\text{exp}(\alpha_\theta(\mathbf{z}_{1:d})_i) = \text{exp} \left( \prod_{i+d+1}^n\, \alpha_\theta(\mathbf{z}_{1:d})_i  \right)
 \end{gathered}
 $$
 
-- 행렬식이 1이므로 **Volume preserving transformation** 이다.
+- 우하단항: 
+
+$$
+\frac{\partial \mathbf{x}_{d+1:n}}{\partial \mathbf{z_{d+1:n}}} = \frac{\partial ( \mathbf{z}_{d+1:n} \odot \text{exp}(\alpha_\theta(\mathbf{z}_{1:d})) + \mu_\theta(\mathbf{z}_{1:d}))}{\partial{z_{d+1}:n}} = \text{exp}(\alpha_\theta(\mathbf{z}_{1:d}))
+$$
+
+- determinant가 1보다 작거나 크므로 **Non-volue preserving tranformation**
+
