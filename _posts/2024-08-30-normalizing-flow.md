@@ -215,7 +215,7 @@ $$
     - $\mathbf{\mu_\theta(z_{1:d})}$ : shift
 - Inverse mapping $\mathbf{x \rightarrow z}$
     - $\mathbf{z_{1:d} = x_{1:d}}$ (identity transformation)
-    - $\mathbf{z_{d+1:n} = (z_{d+1:n}} - \mu_\theta(\mathbf{z_{1:d}}))\odot\text{exp}(-\alpha_\theta(\mathbf{x_{1:d}}))$
+    - $\mathbf{z_{d+1:n} = (x_{d+1:n}} - \mu_\theta(\mathbf{x_{1:d}}))\odot\text{exp}(-\alpha_\theta(\mathbf{x_{1:d}}))$
     - $- \mu_\theta(\mathbf{z_{1:d}})$ : shift
     - $\text{exp}(-\alpha_\theta(\mathbf{x_{1:d}}))$ : divide
 - Jacobian of forward mapping
