@@ -61,7 +61,7 @@ $$
 	- Fisher divergence: $\frac 1 2 E_{x~\sim p_{data}}\left[\Vert \nabla_x log\, p_{data}(x) - s_\theta(x) \Vert^2_2\right]$
 	- 여기서 $\nabla_x log\, p_{data}(x)$ 는 알 수 없으므로, 
 	- Score matching:
-		- $E_{x~\sim p_{data}}\left[\frac 1 2 \Vert s_\theta(x) \Vert^2_2 + tr(\,\,\nabla_x s_\theta(x)\,\,)\right]$
+		- $E_{x~\sim p_{data}}\left[\frac 1 2 \Vert s_\theta(x) \Vert_2^2 + tr(\,\,\nabla_x s_\theta(x)\,\,)\right]$
 		- $\nabla_xs_\theta(x)$ 는 Jacobian of $s_\theta(x)$
 - 그러나 Score matching 은 scalable 하지 않다.
 	- $tr(\nabla_xs_\theta(x))$ 즉 trace of Jacobian $s_\theta(x)$ 는 o(d) 의 역전파로 차원에 선형적으로 scale하다.
@@ -82,9 +82,9 @@ $$
 \end{aligned}
 $$
 
-- 여기서 $\nabla_{\tilde{x}} log\, q_\sigma(\tilde{x}|x)$ 는 가우시안 노이즈인 경우 연산이 쉽다.
-	- $q_\sigma(\tilde{x}|x) = N(\tilde{x}|x, \sigma^2 I)$
-	- $\nabla_{\tilde{x}} log\, q_\sigma(\tilde{x}|x) = -\frac{\tilde{x}-x}{\sigma^2}$
+- 여기서 $\nabla_{\tilde{x}} log\, q_\sigma(\tilde{x}\vert x)$ 는 가우시안 노이즈인 경우 연산이 쉽다.
+	- $q_\sigma(\tilde{x}\vert x) = N(\tilde{x} \vert x, \sigma^2 I)$
+	- $\nabla_{\tilde{x}} log\, q_\sigma(\tilde{x} \vert x) = -\frac{\tilde{x}-x}{\sigma^2}$
 - Pros
 	- 고차원 데이터에 대하여도 최적화가 매우 효율적이다
 - Cons
@@ -114,13 +114,21 @@ $$
 
 ### Score-bases model sampling
 - 에너지 모델처럼 Langevin dynamics sampling 를 적용.
-	- score
-		- $s_\theta(x)$
-	- Follow the scores 
-		- $\tilde{x}_{t+1} \leftarrow \tilde{x}_t + \frac \epsilon 2 s_\theta(\tilde{x}_t)$
-	- Follow noisy scores (Langevin MCMC) 
-		- $Z_t \sim N(0,I)$
-		- $\tilde{x}_{t+1} \leftarrow \tilde{x}_t + \frac \epsilon 2 s_\theta(\tilde{x}_t) + \sqrt{\epsilon} z_t$
+- score
+    - $s_\theta(x)$
+- Follow the scores 
+
+$$
+\tilde{x}_{t+1} = \tilde{x}_t + {\frac{\epsilon}{2}} s_{\theta}(\tilde{x}_t)
+$$
+
+- Follow noisy scores (Langevin MCMC) 
+    - $Z_t \sim N(0,I)$
+
+$$
+\tilde{x}_{t+1} \leftarrow \tilde{x}_t + \frac \epsilon 2 s_\theta(\tilde{x}_t) + \sqrt{\epsilon} z_t
+$$
+        
 ### Pitfall of score based model
 - Maiford hypothesis
 	- 데이터가 균등 분포 되지 않고, 한정된 부분에 집중 되어있음
@@ -187,7 +195,11 @@ $$
 - Sample a mini-batch of noise scale indices $\{i_i, i_2, ... , i_n\} \sim U\{1, 2, ... , L\}$
 - Sample a mini-batch of Gaussian noise $\{z_1, z_2, ..., z_n\} \sim N(0, I)$
 - Estimate the weighted mixture of score matching losses
-	- $\frac 1 n \sum_{k=1}^n \left[ \left\Vert {\sigma_i}_k s_\theta(x_k + {\sigma_i}_k z_k , {\sigma_i}_k) + z_k \right\Vert_2^2 \right]$
+
+$$
+\frac{1}{n} \sum_{k=1}^n \left[\left\Vert {\sigma_i}_k s_\theta(x_k + {\sigma_i}_k z_k , {\sigma_i}_k) + z_k \right\Vert_2^2 \right]
+$$
+
 - Stochastic gradient descent
 
 아래 내용들은 다른 영상에서 참고하여 정리
