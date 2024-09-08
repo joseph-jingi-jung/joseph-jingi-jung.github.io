@@ -156,7 +156,6 @@ img {
 code {
     font-family: monospace;
     padding: 2px;
-    background-color: #f2f2f2;
     color: #222;
     border-radius: 3px;
 }
@@ -164,7 +163,6 @@ code {
 .highlight,
 .code {
     padding: 1px 15px;
-    background-color: #f2f2f2;
     color: #222;
     border-radius: 3px;
     margin-block-start: 1em;
@@ -319,13 +317,6 @@ ul.discover-posts li small a {
         color: #8cc2dd;
     }
 
-    code {
-        background-color: #777;
-    }
-
-    pre code {
-        color: #ddd;
-    }
 
     blockquote {
         color: #ccc;
