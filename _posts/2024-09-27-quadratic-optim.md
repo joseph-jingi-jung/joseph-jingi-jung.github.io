@@ -69,6 +69,7 @@ $$
 \\ \therefore  \mathbf{Su}_1 &= \lambda_1 \mathbf{u}_1
 \end{aligned}
 $$
+
 - 따라서 고윳값의 정의 ($A\mathbf{x} = \lambda \mathbf{x}$) 에 따라,  **$\mathbf{u}_1$ 을 공분산 행렬 $\mathbf{S}$ 에 대한 고유벡터(eigenvector) 라고 할 수 있다.**
 - $\mathbf{u}_1^T \mathbf{u}_1 = 1$ 이므로, **분산 $\mathbf{u}^T_1 \mathbf{Su}_1 = \lambda_1$ 임을 알 수 있다.**
 
@@ -77,7 +78,9 @@ $$
 - 이러한 고유벡터를 주성분(*principal component*) 라고도 부른다.
 - M차원의 subspace로 일반화하면, M개의 고유벡터($\mathbf{u_1, u_2, ..., u_M}$)와 공분산 행렬 $\mathbf{S}$에 대응되는 가장큰 고윳값($\lambda_1, \lambda_2, ... \lambda_M$) 을 얻을 수 있다.
 - 여기서 고유벡터끼리는 직교하기 때문에, $\mathbf{u}^T_i \mathbf{u}_j$ 는 i,j가 같은 경우 1, 아닌 경우 0이 된다. 
-- $\mathbf{u}^T_i \mathbf{u}_j = \delta_{ij}$ (크로네커 델타: 두 인덱스가 같으면 1, 다르면 0이 되는 함수.)
+
+$$
+\mathbf{u}^T_i \mathbf{u}_j = \delta_{ij} \text{ (크로네커 델타: 두 인덱스가 같으면 1, 다르면 0이 되는 함수)}$$
 
 ### Minimum error formulation of PCA
 - 이외에도 reconstrunction error를 최소화 하는 방식으로도 접근 할 수 있다.
@@ -95,7 +98,7 @@ $$
 	- 참고: 
 
 $$
-S = \frac 1 N \sum^N_{n=1}\underbrace{(\mathbf{x}_n - \mathbf{\bar x})}_{N \times D}\underbrace{(\mathbf{x}_n - \mathbf{\bar x})^T}_{D\times N}
+S = \frac 1 N \sum^N_{n=1}\underbrace{(\mathbf{x}_n - \mathbf{\bar x})}_{D \times N}\underbrace{(\mathbf{x}_n - \mathbf{\bar x})^T}_{N \times D}
 $$
 
 - $A^TA$를 이용하여 고유벡터 $\mathbf{V}_i$ 를 구한다.
@@ -115,6 +118,7 @@ A^TA \mathbf{v}_i = \lambda_i \mathbf{v}_i
 \\ \therefore AA^T \text{ 와 } A^TA \text{ 는 제약조건 } s.t. \mathbf{u}_i = A \mathbf{v}_i \text{ 일 때, 동일한 고유값과 고유 벡터를 가진다.}
 \end{gather}
 $$
+
 - 참고사항
 	- $AA^T$ 는 최대 D 고윳값과 고유벡터를 가진다
 	- $A^TA$는 최대 N 또는 N-1 개의 고윳값과 고유벡터를 가진다
