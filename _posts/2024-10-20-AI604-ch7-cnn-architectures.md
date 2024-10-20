@@ -62,6 +62,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 	- 대부분의 메모리 사용량은 초기 레이어에서 사용됨
 	- 대부분의 파라미터 수는 FC Layer에서 사용됨
 	- 대부분의 FLOPS 는 Conv layer에서 사용됨
+
 ### VGGNet
 - Design rules
 	- 모든 Conv를 3x3 kernel 에 stride1, pad 1 적용
@@ -83,6 +84,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 			- $36HWC^2 \rightarrow 36HWC^2$
 		- 각 공간 해상도에서의 Cov 층들이 동일한 양의 연산을 수행
 - AlexNet 대비 훨씬 큰 네트워크 -> 7.3 수준으로 error rate 줄임
+
 ### GoogLeNet
 - 효율성에 많은 기여
 	- 파라미터수, 메모리 사용량, 계산량을 줄임
@@ -102,6 +104,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 	- 12x less params than AlexNet
 	- 27x lesse params than VGG-16
 	- 6.7 Error rate
+
 ### ResNet
 - 100+ layer를 어떻게 학습할지 고민
 	- 단순히 깊게만 쌓았더니, shallow model 보다 test 결과가 나쁘게 나옴 
@@ -130,6 +133,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 			- 1x1 conv를 이용해 채널을 줄였다가 다시 늘림
 			- $4HWC^2 + 9HWC^2 + 4HWC^2 = 17HWC^2$
 		- Depth는 늘리되 계산량은 줄임
+
 #### Improving Residual network
 - ReLU 위치의 변화
 	- Original : ReLU after residual
@@ -139,6 +143,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 		- ReLU inside residual
 		- batch -> Relu -> conv -> batch -> relu -> conv -> shortcut
 	- 약간의 성능 향상이 있으나, 많이 쓰이진 않음
+
 #### ResNet Training recipe
 - Batch Norm after conv
 - Xavier initialization
@@ -147,12 +152,14 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 - mini-batch: 256
 - Weight decay : 1e-5
 - No dropout
+
 #### Model Summary
 - Inception-v4 : Resnet + Inception
 - VGG : 가장 큰 메모리와 가장 큰 연산량
 - GoogLeNet : 매우 효율적임
 - AlexNet : 적은 연산 수, 많은 파라미터
 - ResNet : 간단한 디자인, 적당한 효율성, 높은 정확도
+
 #### Improving ResNet (2)
 - "BottleNeck" residual block 을 Inception model 처럼 병렬로 합침
 - ResNeXt
@@ -163,6 +170,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 	- GAP -> FC -> FC -> Sigmoid 를 통해 일종의 activation 추가.
 	- C x 1 x 1 -> c/16 x 1 x 1 -> c x 1 x 1 -> c x 1 x 1
 	- 마지막 sigmoid 를 residual block의 output에 scale 하는 부분이 Attention 과 유사하게 동작.
+
 ### Densely Connected Neural network
 - Dense blocks는 feedforward 방향의 모든 다른 레이어에 연결됨
 	- 기울기 소실 문제 완화(Alliviates vanishing gradient)
@@ -171,5 +179,6 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 - Identity branch 와 유사히 보이나, 좀 더 vanishing grad 문제에 focus
 - 요즘은 Transformer 가 standard
 - CNN -> 로컬 피처가 중요하다는 inductive bias
+
 ### MobileNets
 - 효율성 높이는 방향

@@ -11,6 +11,7 @@ use_math: true
 AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿아 있다.
 
 ### Introduction
+
 #### Image classification task는 2가지 기본적인 data-driven 방식 있다.
 - K-nearest neighbor
 - linear classifier
@@ -40,6 +41,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 	- 모든 데이터와 레이블을 기억하기
 - Predict
 	- 트레이닝 이미지와 가장 유사한 레이블을 통해 예측하기
+
 #### 거리 기반 이미지 비교
 - L1 distance: $d_1(I_1, I_2) = \sum_P \vert I_1^p - I_2^p \vert$
 - Pixel-wise 절대값 비교 (Pixel-wise absolute value differences)
@@ -53,11 +55,13 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 
 ### K-Nearest Neighbors
 - 가장 가까운 이웃의 레이블을 이용하는 것 대신, K개의 가까운 점에서 가장 많이 나오는 지점을 선택(Majority vote)
+
 #### K-Nearest Neighbors: Distance Metric
 - L1 distance: $d_1(I_1, I_2) = \sum_P \vert I_1^p - I_2^p \vert$
 - L2 distance: $d_2(I_1, I_2) = \sqrt{\sum_p (I_1^P - I_2^P)^2}$
 	- 데이터들이 Spares 하다고 생각되면 L1이 주로 사용됨.
 	- Photometric(광학적 특성, 밝기 또는 색상 데이터) 를 다룰 때는 이미지의 많은 부분이 동일하거나 매우 유사한 색상/밝기를 가질 수 있어서 sparse하다고 표현. 따라서 이때에 L1을 사용
+
 #### Hyperparameters
 - 가장 좋은 k 는 무엇인가?
 - 어떤 distance metric을 쓰는 것이 좋을까?
@@ -65,16 +69,21 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 - Cross-validation
 	- training 데이터를 여러 fold로 나누고, 각 fold를 한번씩 validation으로 두어 테스트하고, 그 평균을 구함.
 	- 작은 데이터셋에 유용하고, deep learning 때 부터는 자주 쓰이진 않음
+
 #### K-Nearest Neighbor: Universal Approximation
 - 학습 샘플의 수가 무한하다면, nearest neighbor는 어떠한 함수도 표현이 가능하다.
+
 #### Problem: Curse of Dimensionality
 - 차원의 저주: 공간의 균일한 커버리지를 위해서는, 차원이 증가할수록 필요한 학습 데이터의 수가 기하급수적으로 증가한다.
 - 따라서 32x32 흑백 이미지라 하더라도 $2^{32 \times 32} \approx 10^{308}$ 으로 경우의 수가 매우 많음
+
 #### Problem: 픽셀의 거리 정보는 도움이 되지 않음
 - 픽셀의 거리 정보(Distance metrics on pixels) 는 도움이 되지 않는다(not informative)
 - Original 이미지와 3가지 변화된 이미지(Occluded, shifted, Tinted) 에 대하여 각각 pixel distance를 측정 하였을 때, 3가지의 거리가 모두 동일 할 수 있다.
 	- Shifted 이미지는 semantic 정보에 아무런 변화가 없는데, occlueded 와 Tinted와 거리차가 같을 수 있는 문제가 있다.
+
 ### Linear classifier
+
 #### Parametric Approach
 - 입력: Image. Array of 32x32x3 numbers. 
 - f(x, W) 를 통과
@@ -88,17 +97,21 @@ $$
 #### Visual viewpoint
 - 각각의 weight는 class 당 template image로 볼 수 있다. (major concept of class)
 - 여기서 score는 match score라 할 수 있음
+
 #### Geometric viewpoint
 - 데이터를 하이퍼 플레인으로 구분
 - Weight 가 하이퍼플레인(Hyper plane) 을 결정
+
 #### 정리
 - Algebraic Viewpoint : $f(x,W) = Wx$
 - Visual Viewpoint : One template for class
 - Geometric Viewpoint : Hyperplanes cutting up space
+
 #### Choose a good W
 - Linear classifier는 좋은 Weight를 찾는 과정
 1. Loss function을 정의하여, training data와의 score의 틀린정도(unhappiness) 를 수치화
 2. Loss function을 최소화 할 수 있는 파라미터를 효율적으로 찾기 => Optimization
+
 #### Loss function
 - Loss function은 현재 classifier의 성능을 말해줌
 - 주어진 데이터셋에 대하여 $\{(x_i, y_i)\}^N_{i=1}$ ,전체 데이터셋에 대한 Loss 평균은 아래와 같다

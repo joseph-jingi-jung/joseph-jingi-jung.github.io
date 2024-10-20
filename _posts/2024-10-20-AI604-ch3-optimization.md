@@ -21,11 +21,13 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 - 가장 가파르게 하강하는 방향은 그래디언트의 음수 방향이다.
 - Loss가 W에 대한 함수이므로, 우리는 $\nabla_W L$ 을 구하길 원한다.
 	- Analytic gradient를 구함 (수학적 미분을 통해 얻은 값)
+
 ### Gradient Descent
 - Hyper-parameter
 	- Weight 초기 값
 	- 스탭 수
 	- Learning rate (step-size)
+
 #### Stochastic Gradient Descent(SGD)
 - 전체 데이터 셋에 대한 Gradient를 구하기 어려움
 - Mini-batch 를 이용한 근사적인 합산을 통해 Loss와 Loss에 대한 Gradient를 구함
@@ -42,6 +44,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 - SGD 문제점 3
 	- 미니배치를 이용하여 노이즈가 발생할 수 있음
 		- 미니 배치를 사용하여 진정한 기울기와 다를 수 있으므로, 샘플에 포함된 데이터에 따라 기울기가 불안정하거나 편향 될 수 있음. 이로 인한 노이즈가 발생.
+
 #### SGD + Momentum
 - 이전 반복과 같은 일반적인 방향으로 계속 이동하기.
 	- $v_{t+1} = \rho v_t + \nabla f(x_t)$
@@ -49,6 +52,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 - 진행 중인 그라디언트의 평균을 velocity로 구성
 - $\rho$ 는 마찰(friction)을 의미. 이전 기울기 방향을 얼마나 유지할지 조정. 보통 0.9 또는 0.99 이용.
 - 여기서 추가된 Velocity 는 local minima 혹은 saddple point 탈출에 도움을 줌.
+
 #### RMSProp
 - 각 차원에서 Historical 제곱합(decay 를 포함)을 이용하여, 그레디언트에 요소별 스케일링을 추가
 	- $g_t = \gamma\,g_{t-1} + (1 - \gamma)(\nabla f(x_{t-1}))^2$
@@ -61,6 +65,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 - RMSProp에서 무슨 일이 일어나는가?
 	- 가파른 방향에서의 억제, 평탄한 방향에서의 가속
 		- 제곱합을 기준으로 기울기를 나누어 스케일링 하기 때문
+
 #### ADAM (almost) as RMSProp + Momentum
 - RMSProp 과 Momentum 같이 사용. 초기 값이 작을 때를 보정하기 위한 bias correction 추가
 	- $m_t = \beta_1 m_{t-1} + (1-\beta_1) \nabla f(x_{t-1})$ : Momentum

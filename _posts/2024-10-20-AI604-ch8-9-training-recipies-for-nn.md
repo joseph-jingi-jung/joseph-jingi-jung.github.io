@@ -11,6 +11,7 @@ use_math: true
 AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿아 있다.
 
 ### Activation Functions
+
 #### Sigmoid
 - $\sigma(x) = \frac{1}{1 +e^{-x}}$
 - 숫자를 0, 1 범위로 압축
@@ -23,11 +24,13 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 			- input에 따라서 upstream/downstream gradient의 방향이 항상 같음
 			- Minibatch가 이를 조금 완화해줌.
 		- exp() 연산이 비쌈
+
 #### TanH
 - 숫자를 -1, 1 범위로 압축
 - 0 중심
 - 문제점
 	- 포화된 뉴런(Saturated neurons)이 기울기를 죽임
+
 #### ReLU
 - $f(x) = max(0,x)$
 - 장점
@@ -38,6 +41,7 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 	- 0 중심 출력이 아님
 	- 성가신 점 (x <0 에 대하여, 더 이상 업데이트가 없음)
 		- Leaky ReLU 같은 것 도입
+
 #### Leaky ReLU
 - $f(x) = max(0.01x, x)$
 - 장점
@@ -45,8 +49,10 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 	- 연산이 효율적임
 	- sigmoid와 tanh 대비 거의 6배 빠른 수렴 속도
 	- x < 0, 지점에서 더 이상 죽지 않음
+
 ##### Parametric Recifier (PReLU)
 - $f(x) = max(\alpha x, x)$
+
 #### Exponential Linear Unit (ELU)
 
 $$
@@ -62,6 +68,7 @@ $$
 - Leaky ReLU 대비 음수 포화영역(Negative saturation) 에서 좀 더 노이즈에 강함
 - 단점
 	- exp 연산이 필요함
+
 #### Scaled Exponential Linear Unit (SELU)
 
 $$
@@ -75,10 +82,12 @@ $$
 - Scaled version of ELU
 - 깊은 네트워크에서 좀 더 잘 동작함
 - Self-Normalizing 특성을 가짐. BatchNorm 없이도 깊은 네트워크 학습 가능하게 함
+
 #### Activation functions - Summary
 - Just use ReLU
 - 짜내야 할 경우 Leaky ReLU, ELU, SELU, GELU 등 써봐라
 - sigmoid와 tanh 는 쓰지 말 것 
+
 ### Data Preprocessing
 - Zero-centered data
 	- 평균을 0으로 맞추기
@@ -92,6 +101,7 @@ $$
 - whitend data
 	- PCA 후 분산을 고유값으로 나눠 모든 특성의 분산이 1이 되게 조정
 	- covariance matrix가 Identity matrix가 되게 함
+
 #### Data processing for images
 - subtract the mean image
 	- 하나의 평균 이미지
@@ -100,21 +110,25 @@ $$
 - subtract per-channel mean and divided by per-channel std
 	- 3개의 평균 이용 평균0, 분산 1
 - PCA나 whitening 은 잘 쓰지 않음
+
 ### Weight Initialization
 - Q. 모든 Weight, Bias 가 0 이면?
 	- 모든 출력이 0이 되고, 모든 gradients가 같아짐.
 	- 대칭성 문제를 해결 할 수 없음(No symmetry breaking). 
 		- 동일한 역전파 기울기로 인해 동일한 학습 경로
+
 #### Idea1. small random numbers
 - Gaussian. 평균 0, 표준편차 0.01
 - 작은 네트워크에서는 잘 동작하나, 깊은 네트워크에서 문제 발생
 - tanh 를 activation으로 여러 층을 쌓음
 	- activation 값이 평균 0에 작은 표준편차(ex. 0.05)로 만들어지고, 역전파 시에 그 activation의 입력값을 사용하게 되어 gradient가 0에 가까워지게 됨.
+
 #### Idea2. large random numbers
 - Gaussian 평균 0, 표준편차 0.05
 - tanh를 activation으로 여러 층 쌓음
 	- $XW$ 값이 한 방향으로 커지거나, 작아져서 activation의 결과는 -1 또는 1에 가까워짐 (saturated)
 	- Local graidients가 0 이 되고, 학습이 어려워짐
+
 #### Xavier initialization
 - Gaussian 평균 0, $std = \frac {1} {\sqrt{D_{in}}}$
 - Activation이 고르게 scaled 됨. No single peak
@@ -137,6 +151,7 @@ $$
 
 - Activation function을 ReLU로 바꾸면, activation이 0으로 collapse 되는 문제가 발생 (no learning)
 	- ReLU correction : $std = \frac {2} {\sqrt{D_{in}}}$
+
 #### Residual Network initialization
 - MSRA(He) Initialization
 	- ReLU 계열에서 주로 사용되는 초기화.
@@ -145,17 +160,22 @@ $$
 - Residual network에서는 첫 conv에는 MSRA(He) 로 초기화하고, 두 번째 conv 에는 0으로 초기화해서 $Var(x + F(x)) = Var(x)$ 가 되게 함.
 
 ### Regularization
+
 #### L2 regularization (Weight decay)
 - $R(W) = \sum_k \sum_l W^2_{k,l}$
+
 #### L1 regularization
 - $R(W) = \sum_k \sum_l \vert W_{k,l} \vert$
+
 #### Elastic net(L1 + L2)
 - $R(W) = \sum_k \sum_l \beta W^2_{k,l} + \vert W_{k,l} \vert$
+
 #### Regularization common pattern
 - training : 랜덤함을 추가하기
 - testing : 랜덤함을 통합하여 주변화 (Marginalize over randomness) 
 	- 주변화(Marginalize) : 변수를 통합 또는 합하여 제거하는 과정. 
 	- 무작위성으로 인해 발생하는 변화를 통합하여 그 영향을 제거하거나 다루는 것을 의미
+
 #### Dropout
 - 특정 뉴론을 0으로 랜덤하게 설정.
 - 확률이 Hyperparameter
@@ -167,6 +187,7 @@ $$
 - Inverted dropout
 	- Drop 과 scale을 학습 할 때 해서, test time에는 아무것도 하지 않게 함.
 - FCN에 주로 dropout 적용
+
 #### Data augmentation
 - Horizontal Flips
 - Random crops and scales
@@ -176,27 +197,33 @@ $$
 		- PCA를 적용하고, color offeset을 주성분으로부터 샘플링
 		- training 이미지에 offset을 더 해줌 
 - 다양하게 혼합하여 쓸 수 있음
+
 #### DropConnect
 - 랜덤 connection을 Drop
 	- Weight를 0으로 설정
+
 #### Fractional pooling
 - 비정수 배율의 풀링 윈도우의 경우 경계를 정확하게 맞출 수 없음
 - 여기에 랜덤 함을 주어, 다양한 변형된 데이터 학습
+
 #### Stochastic Depth
 - Training : 일부 residual block을 스킵함 in ResNet
 - Testing : 전체 네트워크 사용
+
 #### Cutout
 - Training : 특정 이미지 영역을 0으로 설정 (잘라내기)
 - Testing : 전체 이미지 사용
 - 비고
 	- Feature map 에도 적용할 수 있음
 	- 작은 데이터셋에서 잘 동작하나, 큰 데이터셋에서는 덜 사용됨
+
 #### Mixup
 - Training : 랜덤하게 blend 된 이미지로 학습
 - Testing : 원본 이미지 사용
 - 비고
 	- Sample blend를 이용하고, 이에 따라 Target label 도 변환
 		- ex) 고양이 40% 강아지 60%로 블랜딩하면, label 도 cat:0.4, dog:0.6
+
 #### CutMix
 - Training : 이미지의 특정 부분을 잘라 붙여서 학습
 - Testing : 원본 이미지 사용
@@ -214,6 +241,7 @@ $$
 	- good learning rate : 적당한 시점에서 수렴하고 saturated
 	- low learning rate : 정답으로 가는 건 보장하나, 수렴이 너무 느림
 - 따라서, Large learning rate에서 시작해서 점점 줄여가야함
+
 #### Learning rate Decay
 - Step
 	- 고정된 시점에서 고정된 비율로 decay
@@ -231,8 +259,10 @@ $$
 	- 여전히 fixed 도 많이 쓰임
 	- 모델의 동작 확인
 	- 마지막에 Squeeze 할 때 다른 LR Decay 방식을 사용
+
 ### Early Stopping
 - Validation 의 accuracy 가 줄어 드는 부분 즈음에서 stop!
+
 ### Choosing Hyperparameters
 - Grid search
 	- hyperparmeter grid를 만들어서 평가
@@ -265,9 +295,11 @@ $$
 		- Train / val 갭이 너무 작다면, underfitting을 의미
 			- 학습을 더 길게 하거나, 더 큰 모델이 필요.
 	- Step7. GOTO step5
+
 ### Model Ensembles
 - 여러 독립적인 모델을 학습하고, 그 결과를 평균
 - 약 2% extra performance를 보여줌 (Downstream task 에 따라 다름)
+
 #### Model Ensembles - Tips and tricks
 - 여러 독립적인 모델 학습 대신, 한 모델의 여러 snapshot을 이용하기도 함.
 	- DropOut
@@ -276,7 +308,9 @@ $$
 	- Polyak averaging
 		- 학습 중 매 반복(iteration) 에서 계산된 모델의 가중치를 이전 반복에서 얻은 가중치들과 평균화 하여 최종 가중치를 얻음
 		- EMA와 유사
+
 ### Transfer learning
+
 #### Transfer learning with CNNs
 - pre-trained model 의 마지막 FC 레이어만 빼고, 이를 feature extractor로 사용 
 - feature extractor 부분은 Freeze 하고 그 외 부분 학습

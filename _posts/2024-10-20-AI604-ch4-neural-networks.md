@@ -16,9 +16,11 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 	- Feature transform 이후, feature space에서 Linear classifier로 구별이 가능해짐
 
 ### Image Features
+
 #### Image Features: Color histogram
 - texture와 위치 정보를 무시하고, 이미지 전체에 대한 color histogram. Color 를 여러 bin으로 나누고 각각 count
 - Global feature
+
 #### Image Features: Histogram of Oriented gradients (HoG)
 1. 각 픽셀에서의 edge 방향과 강도를 계산
 2. 8x8 구역으로 이미지를 나눔
@@ -31,13 +33,16 @@ AI604 수업을 수강 후 정리한 내용이다. Stanford의 CS231n과 맞닿�
 		- 대각선 엣지가 있는 경우 대각선 방향에 강한 direction
 		- 어떤 부분은 모든 방향으로 강한 direction 가짐
 	- 이는 Texture와 위치 정보를 가져옴. 작은 이미지 변화에 강함
+
 #### Image Features: Bag of Words (Data-Driven!)
 - Step1 : Build codebook
 	- 임의로 패치를 추출하고, 그 패치를 모아 visual words codebook을 생성
 - Step2 : Encode Images
 	- visdual word로 이미지를 재구성. (이미지에서 해당 visual word가 등장하는 빈도수로 histogram 생성)
+
 #### Integrated Image Features
 - Color Histogram, HoG, Bag of Words를 concat 하여 하나의 Image feature로 표현
+
 #### 2011년 ImageNet Chanllenge
 - 이미지 별로 10k 개의 패치를 추출
 - SIFT를 이용한 128차원, 컬러 히스토그램 이용한 96 차원 데이터를 PCA이용해 64차원으로 차원 축소.
@@ -53,11 +58,14 @@ $$
 - 첫 번째 레이어 : bank of templates
 - 두 번째 레이어 : recombine templates
 	- 다른 템플릿들을 한 클래스의 다양한 모드를 커버하는데 사용
+
 #### Activation Functions
 - 비선형성을 주입
+
 #### Space Warping
 - Matrix의 곱을 선형 변환으로 보면, space warping 임
 - 여기서 Activation Function을 통해, 선형 변환된 공간에서 선형 구분을 할 수 있게 만듦
+
 #### Universal Approximation
 - 4 개의 hidden units로 bump 함수를 만들 수 있음
 - 4 K 개의 hidden units로 K개의 bumps의 합을 만들 수 있음
